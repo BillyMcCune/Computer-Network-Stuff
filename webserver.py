@@ -3,9 +3,8 @@ from socket import *
 import sys # In order to terminate the program
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
-serverSocket.bind(('', 80)) #I bind the server to port 80 and allow it to accept any address
+serverSocket.bind(('0.0.0.0', 80)) #I bind the server to port 80 and allow it to accept any address
 serverSocket.listen(5) # I set it to listen to 5 which sets up the number of connections I can have backlogged before I refuse the connection
-print("the server host address is ", gethostname())
 
 while True:
 #Establish the connection

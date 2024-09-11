@@ -21,7 +21,6 @@ full_response = response.decode()
 while response:
     response = clientSocket.recv(1024)
     full_response += response.decode()
-
 # Print the full response from the server
 print(full_response)
 
