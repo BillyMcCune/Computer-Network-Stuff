@@ -11,7 +11,6 @@ totalPacketsLost = 0
 serverSocket.bind(('0.0.0.0', 12000))  #bind socket to localhost and port 12000
 
 while True:
-
     try:
         print("Waiting for a packet...") #basic statement to confirm status of server
         serverSocket.settimeout(5) #setting timeout 
@@ -22,13 +21,12 @@ while True:
         if currentpacket - prevcount != 1:
             serverSocket.send(f"Missing Packet {str(prevcount+1)}".encode(),address)
             totalPacketsLost += currentpacket - prevcount
-        print(f"The total packets lost is: {totalPacketsLost}")
         prevcount = currentpacket
         timeDiff = max(0, sendTime - prevtime) #get packet time diff
         message[-1] = str(timeDiff) #put diff in
         response = " ".join(message) #construct response
         prevtime = sendTime  #assign prevTime to new value
-        serverSocket.sendto(response.encode(),address)
+        print(response)
     except OSError as error: #No packet for 5 seconds error handling
         print("Application closed probably")
         print(f"total number of packets lost = {totalPacketsLost}")
