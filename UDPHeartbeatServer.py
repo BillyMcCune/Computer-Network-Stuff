@@ -5,8 +5,8 @@ import time #import stuff I want/need
 
 serverSocket = socket(AF_INET, SOCK_DGRAM) #set up serverSocket
 prevtime = 0 #inizialize prevtime variable 
-prevcount = 0
-totalPacketsLost = 0
+prevcount = 0 #inizialize prevcount variable 
+totalPacketsLost = 0 #inizialize totalPacketsLost variable 
 
 serverSocket.bind(('0.0.0.0', 12000))  #bind socket to localhost and port 12000
 
@@ -19,17 +19,18 @@ while True:
         sendTime = float(message[-1])  #get packet time
         currentpacket = int(message[-2])
         if currentpacket - prevcount != 1:
-            serverSocket.send(f"Missing Packet {str(prevcount+1)}".encode(),address)
-            totalPacketsLost += currentpacket - prevcount
+            for i in range(1,currentpacket-prevcount): #for loop in case multiple packets lost in a row
+                print(f"Missing Packet {str(prevcount+i)}") # if missing packet print message saying the one that is missing
+            totalPacketsLost += currentpacket - prevcount-1 # calc total packets lost
         prevcount = currentpacket
         timeDiff = max(0, sendTime - prevtime) #get packet time diff
-        message[-1] = str(timeDiff) #put diff in
+        message[-1] = "time diff: " + str(timeDiff) #put diff in
         response = " ".join(message) #construct response
         prevtime = sendTime  #assign prevTime to new value
         print(response)
     except OSError as error: #No packet for 5 seconds error handling
-        print("Application closed probably")
-        print(f"total number of packets lost = {totalPacketsLost}")
-        serverSocket.close()  
-        break
+        print("Application closed probably") #message 
+        print(f"total number of packets lost = {totalPacketsLost}") #calc and print total packets lost
+        serverSocket.close()   #close socket
+        break # get out of while true 
 
